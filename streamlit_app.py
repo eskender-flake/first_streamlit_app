@@ -1,31 +1,34 @@
-import streamlit
-streamlit.title('My Mom\'s New Health Diner')
-streamlit.header('Breakfast Menu')
-streamlit.text('🥣 - Omega 3 & Blueberry Oatmeal')
-streamlit.text('🥗 - Kale, Spinach & Rocket Smoothie')
-streamlit.text('🐔 - Hard-Boiled Free Range-Egg')
-streamlit.text('🥑🍞 - Avocado Toast')
+import streamlit as st
+st.title('My Mom\'s New Health Diner')
+st.header('Breakfast Menu')
+st.text('🥣 - Omega 3 & Blueberry Oatmeal')
+st.text('🥗 - Kale, Spinach & Rocket Smoothie')
+st.text('🐔 - Hard-Boiled Free Range-Egg')
+st.text('🥑🍞 - Avocado Toast') 
 
                 
-streamlit.header('🍌🥭  Build your Own Fruit Smoothie  🥝🍇')
+st.header('🍌🥭  Build your Own Fruit Smoothie  🥝🍇')
 
 import pandas as pd
 my_fruit_list = pd.read_csv("https://uni-lab-files.s3.us-west-2.amazonaws.com/dabw/fruit_macros.txt")
 my_fruit_list = my_fruit_list.set_index('Fruit')
 
 # Let's put a pick list here so they can pick the fruit they want to include
-fruits_selected = streamlit.multiselect("Pick some fruits:", list(my_fruit_list.index), ['Avocado','Strawberries'])
+fruits_selected = st.multiselect("Pick some fruits:", list(my_fruit_list.index), ['Avocado','Strawberries'])
 fruits_to_show = my_fruit_list.loc[fruits_selected]
 
 #display the table on the page
-streamlit.dataframe(fruits_to_show)
+st.dataframe(fruits_to_show)
 
 #New Section to display fruityvice api response
-streamlit.header("Fruityvice Fruit Advice!")
+st.header("Fruityvice Fruit Advice!")
+fruit_choice = st.text_input('What fruit would you line information about?','Kiwi')
+st.write('The user entered',fruit_choice)
+
 import requests
 fruityvice_response = requests.get("https://fruityvice.com/api/fruit/" + "kiwi")
 
 # take the json version of the response and normalize it
 fruityvice_normalized = pd.json_normalize(fruityvice_response.json())
 # output in the screen as a table
-streamlit.dataframe(fruityvice_normalized)
+st.dataframe(fruityvice_normalized)
